@@ -2,8 +2,8 @@
 Clase que representa la entidad dentro del sistema
 Autor 1: Samuel Sanabria Castañeda - 2357862
 Autor 2: Camilo Diaz - 2357577
-Fecha: 25/02/2024
-Version 1.1
+Fecha: 26/02/2024
+Version 1.2
  */
 package laboratorio1;
 

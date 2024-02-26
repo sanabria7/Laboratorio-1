@@ -2,8 +2,8 @@
 Clase que implementa metodos para las estadisticas
 Autor 1: Samuel Sanabria Castañeda - 2357862
 Autor 2: Camilo Diaz - 2357577
-Fecha: 25/02/2024
-Version 1.1
+Fecha: 26/02/2024
+Version 1.2
  */
 package laboratorio1;
 
@@ -35,32 +35,32 @@ public class Estadisticas {
         for(MedicoGeneral medico : lista){
             cont += medico.getConsultas().size();
         }
-        promedio = (cont / lista.size());
-        String mensaje = "Promedio de pacientes por medico: \n     Total medicos = " + lista.size() +  "\n     Total pacientes = " + cont + "\n     Promedio pacientes por medico = " + promedio;
+        promedio = (cont * 1.0 / lista.size());
+        String mensaje = "Promedio de pacientes por medico: \n     Total medicos = " + lista.size() +  "\n     Total pacientes = " + cont + "\n     Promedio pacientes por medico = " + String.format("%.1f", promedio);
         JOptionPane.showMessageDialog(null, mensaje);
     }
     
     public static void estadistica3(ArrayList<MedicoGeneral> lista){
         
-        int contdia, contnoche, contTotal;
-        contdia = contnoche = 0;
+        int contDia, contNoche, contTotal;
+        contDia = contNoche = 0;
         double porcentajeDia, porcentajeNoche;
         for(MedicoGeneral medico : lista){
             if("Diurna".equals(medico.getJornada())){
-                contdia += medico.getConsultas().size();
+                contDia += medico.getConsultas().size();
                 
             }else{
-                contnoche += medico.getConsultas().size();
+                contNoche += medico.getConsultas().size();
                 
             }
             
         }
-        contTotal = contdia + contnoche;
-        porcentajeDia = contdia * 100.0 / contTotal ;
-        porcentajeNoche = (contnoche * 100.0 / contTotal) ;
-        System.out.println(porcentajeDia);
-        String mensaje = "Porcentaje de pacientes por jornada: \n     Total pacientes = " + contTotal +  "\n     Total pacientes [Diurno] = " + contdia + "\n     Total pacientes [Nocturno] = " + contnoche +
-                "\n     Porcentaje pacientes [Diurno]: " + porcentajeDia + "%" + "\n     Porcentaje pacientes [Nocturno]: " + porcentajeNoche +"%";
+        contTotal = contDia + contNoche;
+        porcentajeDia = (contDia * 100.0 / contTotal) ;
+        porcentajeNoche = (contNoche * 100.0 / contTotal) ;
+        
+        String mensaje = "Porcentaje de pacientes por jornada: \n     Total pacientes = " + contTotal +  "\n     Total pacientes [Diurno] = " + contDia + "\n     Total pacientes [Nocturno] = " + contNoche +
+                "\n     Porcentaje pacientes [Diurno]: " + String.format("%.1f", porcentajeDia) + "%" + "\n     Porcentaje pacientes [Nocturno]: " + String.format("%.1f", porcentajeNoche) + "%";
         JOptionPane.showMessageDialog(null, mensaje);
     }
 }

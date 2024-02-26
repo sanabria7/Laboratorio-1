@@ -2,8 +2,8 @@
 Clase que muestra el menu principal para interactuar con la aplicación
 Autor 1: Samuel Sanabria Castañeda - 2357862
 Autor 2: Camilo Diaz - 2357577
-Fecha: 25/02/2024
-Version 1.1
+Fecha: 26/02/2024
+Version 1.2
  */
 package laboratorio1;
 
@@ -12,14 +12,17 @@ import javax.swing.JOptionPane;
 
 public class Laboratorio1 {
     
-    private ArrayList<MedicoGeneral> listaMedicos = new ArrayList<>();
+    private ArrayList<MedicoGeneral> listaMedicos = new ArrayList<>(); 
     
-    public static void main(String[] args) {
+    //Funcion principal de la aplicacion que se encarga de ejecutar el programa y llamar al menu principal
+    public static void main(String[] args) { 
         Laboratorio1 lab = new Laboratorio1();
         lab.menu();   
     }
     
+    //Metodos que cumplen la funcion de menus y submenus
     public void menu(){
+        
         int opc;
         do {            
             opc = Utilities.leerInt("""
@@ -47,6 +50,7 @@ public class Laboratorio1 {
     }  
     
     public void menuEntidades(){
+        
         int opc;
         do{
             opc = Utilities.leerInt("""
@@ -70,8 +74,53 @@ public class Laboratorio1 {
             
         }while(opc != 0);
     }
-   
+    
+    public void menuListados(){
+
+        int opc;
+        do{
+            opc = Utilities.leerInt("""
+                                    Menu Listados
+                                    
+                                    1. Listado general de entidades 
+                                    2. Listar medicos por numero de pacientes 
+                                    0. Salir""");
+            
+            switch (opc) {
+                case 1 -> listadoGeneral();
+                case 2 -> consultarListado();
+                case 0 -> {
+                }
+                default -> Utilities.MensajeError("Opcion invalida");
+            }
+            
+        }while(opc != 0);
+        
+    }
+    
+    public void menuEstadisticas(){
+        
+        if(listaMedicos.size() == 0){
+            JOptionPane.showMessageDialog(null, "Por favor ingrese algunos medicos al sistema para poder consultar las estadisticas", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int opc;
+        do {
+            opc = JOptionPane.showOptionDialog(null, "Seleccione la estadistica que desea consultar:\n     1. Cantidad de pacientes por consulta     \n     2. Promedio pacientes por medico     \n     3. Porcentaje pacientes por jornada", "Menu de Estadisticas"
+                    , 0, 1, null, new String[]{"Estadistica 1", "Estadistica 2", "Estadistica 3", "Salir"}
+                    , null);
+
+            switch (opc) {
+                case 0 -> Estadisticas.estadistica1(listaMedicos);
+                case 1 -> Estadisticas.estadistica2(listaMedicos);
+                case 2 -> Estadisticas.estadistica3(listaMedicos);
+            }
+        }while (opc != 3);
+    }
+    
+    //Metodos para gestionar entidades. Estos metodos son llamados por el MenuEntidades
     public void nuevaEntidad(){
+        
         MedicoGeneral medico = new MedicoGeneral();
         medico.setDocumento(listaMedicos);
         medico.setNombre();
@@ -115,61 +164,39 @@ public class Laboratorio1 {
         int opc = JOptionPane.showConfirmDialog(null, "¿Esta seguro de que desea eliminar la entidad?\n" + medico
                 , "Eliminar entidad", 0);
         if(opc == 0){
-            mensaje ="Se ha eliminado correctamente la entidad";
+            mensaje = "Se ha eliminado correctamente la entidad";
             listaMedicos.remove(index);
         }else mensaje = "Se ha cancelado la eliminacion de la entidad";
         JOptionPane.showMessageDialog(null, mensaje, "Eliminar entidad", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    public void menuListados(){
-
-        int opc;
-        do{
-            opc = Utilities.leerInt("""
-                                    Menu Listados
-                                    
-                                    1. Listado general de entidades 
-                                    2. Listar medicos por numero de pacientes 
-                                    0. Salir""");
-            
-            switch (opc) {
-                case 1 -> listadoGeneral();
-                case 2 -> consultarListado();
-                case 0 -> {
-                }
-                default -> Utilities.MensajeError("Opcion invalida");
-            }
-            
-        }while(opc != 0);
-        
-    }
-    
+    //Metodos para ver los diferentes Listados. Estos metodos son llamados por el MenuListados
     public void listadoGeneral(){
+        
+        if(listaMedicos.size() == 0){
+            System.out.println("Por el momento no existen medicos registrados");
+            return;
+        }
         int cont = 0;
         for(MedicoGeneral medico : listaMedicos){
             cont++;
-            System.out.println("Medico "+cont+": "+medico);
+            System.out.println("Medico " + cont + ": " + medico);
         }
     }
     
     public void consultarListado(){
+        
         int cont = 0;
         int cantidad = Utilities.leerInt("Ingrese el número de pacientes:");
-        System.out.println("Medicos con "+ cantidad+ " pacientes");
+        System.out.println("Medicos con "+ cantidad + " pacientes:");
         for(MedicoGeneral medico : listaMedicos){
             if(cantidad == medico.getConsultas().size()){
                 cont++;
-                System.out.println("Medico "+cont+": "+medico);
+                System.out.println("Medico " + cont + ": " + medico);
             }
         }
-    }
-    
-    public void menuEstadisticas(){
-        
-        int opc = JOptionPane.showOptionDialog(null, "Seleccione la estadistica que desea consultar:\n     1. Cantidad de pacientes por consulta     \n     2. Promedio pacientes por medico     \n     3. Porcentaje pacientes por jornada", "Menu de Estadisticas", 0, 1, null, new String[] {"Estadistica 1", "Estadistica 2", "Estadistica 3"}, null);
-        
-        if(opc == 0) Estadisticas.estadistica1(listaMedicos);
-        if(opc == 1) Estadisticas.estadistica2(listaMedicos);
-        if(opc == 2) Estadisticas.estadistica3(listaMedicos);
+        if(cont == 0){
+            System.out.println("No se encontraron medicos con " + cantidad + " pacientes");
+        }
     }
 }
